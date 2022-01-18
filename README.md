@@ -1,0 +1,1 @@
+# -allan_deviation_from_impact

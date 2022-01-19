@@ -5,15 +5,13 @@
 #include<tgmath.h>
 using namespace std;
 
-fstream data1;
-fstream data2;
-fstream result1;
-fstream result2;
+fstream input;
+fstream output;
 
 const int samples = 90000; //N
 
 //function that counts the sum from the Allan deviation formula
-long double allan(long long int* arr, int n, const int interval)
+long double Allan(long long int* arr, int n, const int interval)
 {
     long double sum = 0;
     for (int i = 0; i < samples - 2 * n; i++)
@@ -32,79 +30,66 @@ long double allan(long long int* arr, int n, const int interval)
 
 int main()
 {
-    long long int* container1 = new long long int[samples];
-    long long int* container2 = new long long int[samples];
-    data1.open("putty1.log", ios::in);
-    data2.open("putty2.log", ios::in);
-    result1.open("output1.txt", ios::out);
-    result2.open("output2.log", ios::out);
+    long long int* container = new long long int[samples];
+    input.open( "putty_example_1.log", ios::in);
+    output.open("output.txt", ios::out);
 
-    long long int x1 = 0, x2 = 0;
-    bool check1 = false, check2 = false;
+    long long int x = 0;
+    bool check = false;
 
     for (int i = 0; i < samples; i++)
     {
-        data1 >> container1[i];
-        data2 >> container2[i];
+        //cout << container[i] << endl;
+        input >> container[i];
+        container[i] -= 50000; //removal of constant component
 
-        container1[i] -= 50000; //removal of constant component
-        container2[i] -= 50000;
-
-        if (container1[i] < 0)
+        if (container[i] < 0)
         {
-            if (!check1)
+            if (!check)
             {
-                check1 = true;
-                x1++;
+                check = true;
+                x++;
             }
         }
-        else if (check1)
+        else if (check)
         {
-            check1 = false;
+            check = false;
         }
 
-        if (container2[i] < 0)
-        {
-            if (!check2)
-            {
-                check2 = true;
-                x2++;
-            }
-        }
-        else if (check2)
-        {
-            check2 = false;
-            x2++;
-        }
-
-        container1[i] += 100000 * x1;
-        container2[i] += 100000 * x2;
-
-        container1[i] *= 10; //[ns]
-        container2[i] *= 10; //[ns]
-
+        container[i] += 100000 * x;
+        container[i] *= 10; //[ns]
     }
 
     const int interval = 10000000; //t0
-    /*
-    //calculation starts with n=3, ends with n=N/4
-    for (int n = 3; n < samples / 4; n++) {
-        long double  ADEV1 = allan(container1, n, 10000000);                    //calculate the sum for the first set of data
-        long double  ADEV2 = allan(container2, n, 10000000);
+    int onePercent;
+    int detect = 0;
+    int loadingStatus = 0;
+    long double allanTemp;
 
-        result1 << ADEV1 << endl;                                               //save the results of the calculations for n to a file...
-        result2 << ADEV2 << endl;
-    }
-    */
-    for (int i = 0; i < samples; i++)
+    for (int n = 3; n < samples / 4; n++)
     {
-        result1 << container1[i] << endl;                                               //save the results of the calculations for n to a file...
-        result2 << container1[i] << endl;
+        allanTemp = Allan(container, n, interval);
+        onePercent = ( ( samples / 4 ) - 1 )/ 100;
+
+        if(detect == onePercent)
+        {
+          cout << loadingStatus << "%";
+          if( loadingStatus % 10 == 0)
+          {
+            cout << "\t ...random checks: " << allanTemp << endl;
+          }
+          else cout << endl;
+          detect = 3;
+          loadingStatus ++;
+        }
+        else detect++;
+
+        output << n << "\t" << allanTemp << endl;                                               //save the outputs of the calculations for n to a file...
     }
-    data1.close();
-    data2.close();
-    result1.close();
-    result2.close();
-    cout << "...opus magnum, its done.";
+
+    input.close();
+    output.close();
+
+    cout << endl << "...opus magnum, its done.";
     return 0;
 }

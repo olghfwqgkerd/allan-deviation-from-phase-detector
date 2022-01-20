@@ -8,7 +8,7 @@ using namespace std;
 
 fstream input;
 fstream output;
-
+//HI
 //function that counts the sum from the Allan deviation formula
 long double Allan(long long int* arr, int n, const int interval)
 {

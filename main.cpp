@@ -3,12 +3,11 @@
 #include<fstream>
 #include<cstdlib>
 #include<tgmath.h>
+
 using namespace std;
 
 fstream input;
 fstream output;
-
-const int samples = 90000; //N
 
 //function that counts the sum from the Allan deviation formula
 long double Allan(long long int* arr, int n, const int interval)
@@ -30,18 +29,29 @@ long double Allan(long long int* arr, int n, const int interval)
 
 int main()
 {
+
+    int samples = 90000; //N
+    int constComp = 50000; //Constant component
+
+    cout << "   \t File path: " << "/putty_example_1.log" << endl;
+    cout << "(2)\t N: " << samples << endl;
+    cout << "(3)\t Constant component: " << constComp << endl;
+    cout << "   \t Type of wave: " << "Sawtooth wave" << endl;
+
+
     long long int* container = new long long int[samples];
+    long long int x = 0;
+    bool check = false;
+
     input.open( "putty_example_1.log", ios::in);
     output.open("output.txt", ios::out);
 
-    long long int x = 0;
-    bool check = false;
 
     for (int i = 0; i < samples; i++)
     {
         //cout << container[i] << endl;
         input >> container[i];
-        container[i] -= 50000; //removal of constant component
+        container[i] -= constComp; //removal of constant component
 
         if (container[i] < 0)
         {

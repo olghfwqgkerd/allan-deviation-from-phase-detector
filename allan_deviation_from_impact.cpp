@@ -1,35 +1,36 @@
-///////////////////////////////
-//..........or v0.8..........//
-///////////////////////////////
+////////////////////////////////////
+//..........olg rog v0.8..........//
+////////////////////////////////////
 
 #include<iostream>
 #include<fstream>
+#include<math.h>
 
 using namespace std;
 
 fstream input;
 fstream output;
 
-void ConsoleClear(int a) //czysczenie konsoli
+void TerminalClear(int a) // czysczenie terminalu
 {
     switch (a)
     {
-    case 1: system("cls"); //Windows
+    case 1: system("cls"); // Windows
         break;
-    case 2: system("clear"); //GNU/LINUX
+    case 2: system("clear"); // GNU/LINUX
         break;
     default: cout << endl << "==================================================" << endl << endl; //unknown
         break;
     }
 }
 
-//funkcja obliczajaca dewiacje Allana
+// funkcja obliczajaca dewiacje Allana
 long double Allan(long long int* arr, int n, const int interval, int samples)
 {
     long double sum = 0;
     for (int i = 0; i < samples - 2 * n; i++)
     {   // postanowilismy rozpisac wzzor tak aby kazda czesc sumy byla od razu dzielona, aby zmniejszyc ryzyko przpelnienia
-        long double auxSum = 0; //tymcasowa zmienna przechowuajca wynik
+        long double auxSum = 0; // tymcasowa zmienna przechowuajca wynik
         auxSum += arr[i + 2 * n] - 2 * arr[i + n] + arr[i]; // aktualnie obliczana czesc sumy
         auxSum *= auxSum;
         auxSum /= 2 * n * n;
@@ -38,17 +39,17 @@ long double Allan(long long int* arr, int n, const int interval, int samples)
         auxSum /= (samples - 2 * n);
         sum += auxSum;
     }
-    return sqrt(sum); //zwracanie calej sumy przez pierwiastek
+    return sqrt(sum); // zwracanie calej sumy przez pierwiastek
 }
 
 int main()
 {
     int system = 0;
     char choose = 'x';
-    int samples = 90000; //liczba probek
-    int constComp = 50000; //sk³adowa sta³a
-    int interval = 10000000; //t0
-    int measRangVal = 100000; //wartosc zakresu pomiarowego
+    int samples = 90000; // liczba probek
+    int constComp = 50000; // skÅ‚adowa staÅ‚a
+    int interval = 10000000; // t0
+    int measRangVal = 100000; // wartosc zakresu pomiarowego
 
     cout << endl;
     cout << "     (1) Windows" << endl;
@@ -58,7 +59,7 @@ int main()
 
     while (choose != 's' && choose != 'S')
     {
-        ConsoleClear(system);
+        TerminalClear(system);
         cout << endl;
 
 //######################### MENU #########################
@@ -80,7 +81,7 @@ int main()
         cout << "     Type of wave ................ " << "Sawtooth wave" << endl;
         cout << " (6) Interval (t0) ............... " << interval << endl;
         cout << " (7) Measuring range value ....... " << measRangVal << endl;
-        
+
         cout << endl;
         cout << "     Choose number to edit or (S)tart (E)xit ";
 
@@ -90,7 +91,7 @@ int main()
 
         if (choose != 's' && choose != 'S')
         {
-            ConsoleClear(0);
+            TerminalClear(0);
             switch (choose)
             {
             case '0':
@@ -120,7 +121,7 @@ int main()
         }
     }
 
-    ConsoleClear(system);
+    TerminalClear(system);
 
     long long int* container = new long long int[samples]; // tworzenie tabeli do przechowywania zmiennych z pliku
     long long int x = 0;
@@ -132,7 +133,7 @@ int main()
     for (int i = 0; i < samples; i++)
     {
         input >> container[i];
-        container[i] -= constComp; //usuniecie skladowej zmiennej
+        container[i] -= constComp; // usuniecie skladowej zmiennej
 
         if (container[i] < 0) // wykrywanie przeskoku
         {
@@ -147,7 +148,7 @@ int main()
             check = false;
         }
 
-        container[i] += measRangVal * x; //dodanie wartoœci zakresu pomiaroweg
+        container[i] += measRangVal * x; // dodanie wartoÅ›ci zakresu pomiaroweg
         container[i] *= 10; //[ns]
     }
 

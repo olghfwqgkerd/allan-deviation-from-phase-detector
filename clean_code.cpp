@@ -70,7 +70,7 @@ int main()
         if( n == samples / 8 ) cout << "75%" << endl;
         if( n == samples / 4 ) cout << "100%" << endl;
 
-        output << n << "\t" << Allan(container, n, interval, samples) << endl;                                               //save the outputs of the calculations for n to a file...
+        output << n << "\t" << Allan(container, n, interval, samples) << endl;   //save the outputs of the calculations for n to a file...
     }
 
     input.close();

@@ -3,11 +3,7 @@
 ///////////////////////////////
 
 #include<iostream>
-#include<math.h>
 #include<fstream>
-#include<cstdlib>
-#include<tgmath.h>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -48,11 +44,11 @@ long double Allan(long long int* arr, int n, const int interval, int samples)
 int main()
 {
     int system = 0;
-    char choose = 'a';
-    int samples = 90000; //N
+    char choose = 'x';
+    int samples = 90000; //liczba probek
     int constComp = 50000; //sk³adowa sta³a
     int interval = 10000000; //t0
-    int measRangVal = 100000; //Measuring range value
+    int measRangVal = 100000; //wartosc zakresu pomiarowego
 
     cout << endl;
     cout << "     (1) Windows" << endl;
@@ -64,6 +60,8 @@ int main()
     {
         ConsoleClear(system);
         cout << endl;
+
+//######################### MENU #########################
 
         cout << " (0) Operating system ............ ";
         switch (system)
@@ -92,7 +90,7 @@ int main()
 
         if (choose != 's' && choose != 'S')
         {
-            ConsoleClear(9);
+            ConsoleClear(0);
             switch (choose)
             {
             case '0':
@@ -153,13 +151,12 @@ int main()
         container[i] *= 10; //[ns]
     }
 
-
     int onePercent;
     int detect = 0;
     int loadingStatus = 0;
     long double allanTemp;
 
-    cout << endl << "--------Start of the calculation--------" << endl << endl;
+    cout << "--------Start of the calculation--------" << endl << endl;
 
     for (int n = 3; n < samples / 4; n++)
     {

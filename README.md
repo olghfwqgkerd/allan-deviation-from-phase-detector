@@ -1,1 +1,1 @@
-# -allan_deviation_from_impact
+## Allan deviation from log

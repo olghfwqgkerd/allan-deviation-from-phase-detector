@@ -1,3 +1,3 @@
 ## Allan deviation from phase detector logs
 
-![obraz](https://user-images.githubusercontent.com/88160019/150651508-985ad015-c0fc-446a-97eb-67aa2b4f312c.png)
+![obraz](https://user-images.githubusercontent.com/88160019/150651522-0fbb7674-03f7-4fa1-9ec2-1d1abac77af1.png)

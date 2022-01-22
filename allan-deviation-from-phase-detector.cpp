@@ -25,7 +25,6 @@ void TerminalClear(int a)
     }
 }
 
-
 long double AllanDeviation(long long int* arr, unsigned int n, unsigned int intervalSampling, unsigned int samples)
 {
     long double sum = 0;
@@ -66,9 +65,8 @@ int main()
     float offset = 50000; // offset
     unsigned int intervalSampling = 10000000; // t0
     unsigned int measRangVal = 100000; // measuring range value
-	unsigned int firstn = 3;
-	unsigned int lastn = samples / 4;
-
+	unsigned int firstn = 3; // first observation interval number
+	unsigned int lastn = samples / 4; // last observation interval number
 
 	system = SystemSelection();
 

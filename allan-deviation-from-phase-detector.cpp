@@ -20,13 +20,13 @@ void TerminalClear(int a)
 		cout << endl;
 		system("clear"); // Unix
         break;
-    default: cout << endl << "===========================================================" << endl << endl; //unknown
+    default: cout << endl << "=======================================================================" << endl << endl; //unknown
         break;
     }
 }
 
 
-long double AllanDeviation(long long int* arr, unsigned int n, unsigned int interval, unsigned int samples)
+long double AllanDeviation(long long int* arr, unsigned int n, unsigned int intervalSampling, unsigned int samples)
 {
     long double sum = 0;
     for (unsigned int i = 0; i < samples - 2 * n; i++)
@@ -35,8 +35,8 @@ long double AllanDeviation(long long int* arr, unsigned int n, unsigned int inte
         tempSum += arr[i + 2 * n] - 2 * arr[i + n] + arr[i];
         tempSum *= tempSum;
         tempSum /= 2 * n * n;
-        tempSum /= interval;
-        tempSum /= interval;
+        tempSum /= intervalSampling;
+        tempSum /= intervalSampling;
         tempSum /= (samples - 2 * n);
         sum += tempSum;
     }
@@ -64,8 +64,11 @@ int main()
 
     unsigned int samples = 90000; // number of samples, records in logs
     float offset = 50000; // offset
-    unsigned int interval = 10000000; // t0
+    unsigned int intervalSampling = 10000000; // t0
     unsigned int measRangVal = 100000; // measuring range value
+	unsigned int firstn = 3;
+	unsigned int lastn = samples / 4;
+
 
 	system = SystemSelection();
 
@@ -75,8 +78,8 @@ int main()
     {
         TerminalClear(system);
 
-		cout << "====================[PARAMETER SETTING]====================" << endl;
-        cout << "(0) Operating system ............... ";
+		cout << "==========================[PARAMETER SETTING]==========================" << endl;
+		cout << "(0) Operating system ............................. ";
         switch (system)
         {
         case 1: cout << "Windows" << endl;
@@ -86,14 +89,16 @@ int main()
         default: cout << "unknown" << endl;
             break;
         }
-        cout << "    Input file path ................ " << "./input.log" << endl;
-        cout << "    Output file path ............... " << "./output.txt" << endl;
-		cout << "-----------------------------------------------------------" << endl;
-		cout << "    Type of wave ................... " << "Sawtooth wave" << endl;
-        cout << "(4) Number of samples [N] .......... " << samples << endl;
-        cout << "(5) Offset ......................... " << offset << endl;
-        cout << "(6) Interval [t0] .................. " << interval << endl;
-        cout << "(7) Measuring range value .......... " << measRangVal << endl;
+        cout << "    Input file path .............................. " << "./input.log" << endl;
+        cout << "    Output file path ............................. " << "./output.txt" << endl;
+		cout << "-----------------------------------------------------------------------" << endl;
+		cout << "    Type of wave ................................. " << "Sawtooth wave" << endl;
+        cout << "(4) Number of samples [N] ........................ " << samples << endl;
+        cout << "(5) Sampling interval [t0] ....................... " << intervalSampling << endl;
+		cout << "(6) First observation interval number [first n] .. " << firstn << endl;
+		cout << "(7) Last observation interval number [last n] .... " << lastn << " (N/4 =" << samples / 4 << ")" << endl;
+        cout << "(8) Offset ....................................... " << offset << endl;
+        cout << "(9) Measuring range value ........................ " << measRangVal << endl;
         cout << endl;
         cout << "    Choose number to edit, (S)tart or (E)xit ";
 
@@ -119,17 +124,25 @@ int main()
                 cin >> samples;
                 break;
             case '5':
-                cout << "Offset: ";
-                cin >> offset;
+                cout << "Sampling interval: ";
+                cin >> intervalSampling;
                 break;
             case '6':
-                cout << "Interval: ";
-                cin >> interval;
+                cout << "First observation interval number: ";
+                cin >> firstn;
                 break;
             case '7':
-                cout << "Measuring range value: ";
-                cin >> measRangVal;
+                cout << "Last observation interval number: ";
+                cin >> lastn;
                 break;
+			case '8':
+	            cout << "Offset: ";
+	            cin >> offset;
+	            break;
+			case '9':
+		        cout << "Measuring range value: ";
+		        cin >> measRangVal;
+		        break;
             default:
 				break;
             }
@@ -170,12 +183,12 @@ int main()
     int loadingStatus = 0;
     long double allanTemp = 0;
 
-    cout << "=================[Start of the calculation]================" << endl << endl;
+    cout << "=======================[Start of the calculation]======================" << endl << endl;
 
-    for (unsigned int n = 3; n < samples / 4; n++)
+    for (unsigned int n = firstn; n < lastn; n++)
     {
-        allanTemp = AllanDeviation(container, n, interval, samples);
-        onePercent = ((samples / 4) - 1) / 100;
+        allanTemp = AllanDeviation(container, n, intervalSampling, samples);
+        onePercent = ((lastn) - 1) / 100;
 
         if (detect == onePercent)
         {
@@ -185,7 +198,7 @@ int main()
                 cout << "........random checks: " << allanTemp << endl;
             }
             else cout << endl;
-            detect = 3;
+            detect = firstn;
             loadingStatus++;
         }
         else detect++;

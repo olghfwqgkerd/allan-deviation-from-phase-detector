@@ -65,10 +65,10 @@ int main()
     float offset = 50000; // offset
     unsigned int intervalSampling = 10000000; // t0
     unsigned int measRangVal = 100000; // measuring range value
-	unsigned int firstn = 3; // first observation interval number
-	unsigned int lastn = samples / 4; // last observation interval number
+    unsigned int firstn = 3; // first observation interval number
+    unsigned int lastn = samples / 4; // last observation interval number
 
-	system = SystemSelection();
+    system = SystemSelection();
 
 //##################### MENU SECTION #########################
 
@@ -133,16 +133,16 @@ int main()
                 cout << "Last observation interval number: ";
                 cin >> lastn;
                 break;
-			case '8':
-	            cout << "Offset: ";
-	            cin >> offset;
-	            break;
-			case '9':
-		        cout << "Measuring range value: ";
-		        cin >> measRangVal;
-		        break;
+	    case '8':
+	        cout << "Offset: ";
+	        cin >> offset;
+	        break;
+	    case '9':
+		cout << "Measuring range value: ";
+		cin >> measRangVal;
+		break;
             default:
-				break;
+	    	break;
             }
         }
     }
